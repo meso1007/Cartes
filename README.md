@@ -1,6 +1,8 @@
 # Cartes
 
-Cartes is an AI-powered learning platform that generates customized learning roadmaps based on your goals. It helps you master programming concepts through "Reverse Learning" - starting with what you want to build and learning the necessary skills to achieve it.
+Cartes is an AI-powered learning platform that generates customized learning roadmaps based on your goals. It helps you master programming concepts through "Reverse Learning" — starting with what you want to build and learning the necessary skills to achieve it.
+
+[**Live Demo**](https://cartes-three.vercel.app) ︱ [**Project Report**](./PROJECT_REPORT.md)
 
 ![Cartes Main Screen](./main_screen.png)
 
@@ -16,16 +18,16 @@ Cartes is an AI-powered learning platform that generates customized learning roa
 ## Tech Stack
 
 ### Frontend
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS v4
 - **State Management**: React Context
 - **Internationalization**: next-intl
 
 ### Backend
 - **Language**: Go (Golang)
 - **Framework**: Echo
-- **Database**: SQLite (with GORM)
+- **Database**: PostgreSQL on Supabase (production) / SQLite (local development), via GORM
 - **AI**: Google Gemini API (gemini-flash-latest)
 - **Authentication**: JWT
 
@@ -49,11 +51,15 @@ Cartes is an AI-powered learning platform that generates customized learning roa
    JWT_SECRET=your_jwt_secret
    ```
 
+   By default the backend uses SQLite (`reverse-learn.db`). To use PostgreSQL,
+   set `DB_DRIVER=postgres` together with `DB_HOST`, `DB_PORT`, `DB_USER`,
+   `DB_PASSWORD`, and `DB_NAME`.
+
 3. Run the server:
    ```bash
    go run cmd/server/main.go
    ```
-   The backend server will start on `http://localhost:8081`.
+   The backend server will start on `http://localhost:8080`.
 
 ### Frontend Setup
 
@@ -67,11 +73,24 @@ Cartes is an AI-powered learning platform that generates customized learning roa
    npm install
    ```
 
-3. Run the development server:
+3. Set the API endpoint in `.env.local` (see `.env.example`):
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:8080
+   ```
+
+4. Run the development server:
    ```bash
    npm run dev
    ```
    The frontend application will be available at `http://localhost:3000`.
+
+### Docker Compose
+
+To run the full stack (frontend + backend + PostgreSQL) together:
+
+```bash
+GEMINI_API_KEY=your_key JWT_SECRET=your_secret docker compose up --build
+```
 
 ## Usage
 
@@ -80,6 +99,12 @@ Cartes is an AI-powered learning platform that generates customized learning roa
 3. Enter your learning goal (e.g., "Build a Todo App") and preferred tech stack.
 4. Click "Propose Plan" to generate a roadmap.
 5. Follow the steps and take quizzes to test your knowledge.
+
+## Design & Architecture
+
+The reasoning behind the product and the architecture decisions are documented in
+[`PROJECT_REPORT.md`](./PROJECT_REPORT.md) — data model, AI prompting strategy,
+and infrastructure choices.
 
 ## License
 
